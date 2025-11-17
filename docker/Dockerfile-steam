@@ -1,5 +1,10 @@
 # Pull base image.
-FROM jlesage/baseimage-gui:debian-11
+FROM jlesage/baseimage-gui:debian-12-v4
+
+# Create missing init script that the base image expects
+RUN mkdir -p /etc/cont-init.d && \
+    echo '#!/bin/sh' > /etc/cont-init.d/00-app-niceness.sh && \
+    chmod +x /etc/cont-init.d/00-app-niceness.sh
 
 # Steam appId - can be overridden at runtime
 ENV SRCDS_APPID=413150
@@ -52,7 +57,7 @@ RUN chmod -R 775 /data/Stardew && \
     chown -R 1000:1000 /data/Stardew && \
     chmod +x /opt/*.sh
 
-RUN mkdir /etc/services.d/utils && touch /etc/services.d/app/utils.dep
+RUN mkdir -p /etc/services.d/utils && touch /etc/services.d/app/utils.dep
 COPY docker/run /etc/services.d/utils/run
 RUN chmod +x /etc/services.d/utils/run
 
