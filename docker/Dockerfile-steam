@@ -1,5 +1,10 @@
 # Pull base image.
-FROM jlesage/baseimage-gui:debian-11
+FROM jlesage/baseimage-gui:debian-12-v4
+
+# Create missing init script that the base image expects
+RUN mkdir -p /etc/cont-init.d && \
+    echo '#!/bin/sh' > /etc/cont-init.d/00-app-niceness.sh && \
+    chmod +x /etc/cont-init.d/00-app-niceness.sh
 
 # Steam appId - can be overridden at runtime
 ENV SRCDS_APPID=413150
